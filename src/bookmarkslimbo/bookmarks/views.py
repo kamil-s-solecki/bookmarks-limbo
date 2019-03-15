@@ -17,3 +17,6 @@ def api_root(request):
 class BookmarkViewSet(viewsets.ModelViewSet):
     queryset = Bookmark.objects.all()
     serializer_class = BookmarkSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
