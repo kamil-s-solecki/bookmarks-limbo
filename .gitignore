@@ -2,4 +2,4 @@ db.*
 .idea
 __pycache__
 **/__pycache__/
-requests/tokens/*
+src/requests/tokens/*
