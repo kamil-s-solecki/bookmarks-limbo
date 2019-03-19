@@ -1,3 +1,5 @@
+import datetime
+
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -22,4 +24,12 @@ class BookmarkViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
     def get_queryset(self):
-        return Bookmark.objects.filter(owner=self.request.user)
+        queryset = Bookmark.objects.filter(owner=self.request.user)
+        expired = self.request.query_params.get('expired', None)
+
+        if expired == 'true':
+            queryset = queryset.filter(expiration__lt=datetime.datetime.now())
+        elif expired == 'false':
+            queryset = queryset.filter(expiration__gte=datetime.datetime.now())
+
+        return queryset
