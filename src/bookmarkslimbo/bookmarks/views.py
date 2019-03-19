@@ -5,8 +5,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from bookmarks.models import Bookmark
-from bookmarks.serializers import BookmarkSerializer
+from bookmarks.models import Bookmark, Tag
+from bookmarks.serializers import BookmarkSerializer, TagSerializer
 
 
 @api_view(['GET'])
@@ -33,3 +33,14 @@ class BookmarkViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(expiration__gte=datetime.datetime.now())
 
         return queryset
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    def get_queryset(self):
+        return Tag.objects.filter(owner=self.request.user)
