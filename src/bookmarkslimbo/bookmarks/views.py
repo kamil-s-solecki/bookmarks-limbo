@@ -1,7 +1,7 @@
 import datetime
 
-from rest_framework import viewsets
-from rest_framework.decorators import api_view
+from rest_framework import viewsets, status
+from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
@@ -33,6 +33,25 @@ class BookmarkViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(expiration__gte=datetime.datetime.now())
 
         return queryset
+
+    @action(detail=True, methods=['put'], serializer_class=TagSerializer)
+    def tags(self, request, pk=None):
+        bookmark = self.get_object()
+        if request.data['name']:
+            tag = self._get_tag(request.data['name'])
+            bookmark.tags.add(tag)
+            bookmark.save()
+            return Response(data=bookmark)
+        else:
+            return Response('name is required',
+                            status=status.HTTP_400_BAD_REQUEST)
+
+    def _get_tag(self, name):
+        tag = Tag.objects.filter(name=name).first()
+        if tag is None:
+            tag = Tag.objects.create(name=name, owner=self.request.user)
+            tag.save()
+        return tag
 
 
 class TagViewSet(viewsets.ModelViewSet):

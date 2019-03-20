@@ -4,6 +4,7 @@ from bookmarks.models import Bookmark, Tag
 
 
 class TagSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
 
     class Meta:
         model = Tag
