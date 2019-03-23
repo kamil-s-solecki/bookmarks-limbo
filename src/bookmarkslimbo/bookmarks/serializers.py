@@ -13,7 +13,6 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.username')
     tags = serializers.SlugRelatedField(slug_field='name', read_only=True, many=True)
     owner = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
