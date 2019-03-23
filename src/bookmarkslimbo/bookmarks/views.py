@@ -1,6 +1,6 @@
 import datetime
 
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -16,23 +16,25 @@ def api_root(request):
     })
 
 
+class IsPastExpirationDateFilterBackend(filters.BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        expired = request.query_params.get('expired', None)
+
+        if expired == 'true':
+            return queryset.filter(expiration__lt=datetime.datetime.now())
+        elif expired == 'false':
+            return queryset.filter(expiration__gte=datetime.datetime.now())
+        else:
+            return queryset
+
+
 class BookmarkViewSet(viewsets.ModelViewSet):
     queryset = Bookmark.objects.all()
     serializer_class = BookmarkSerializer
+    filter_backends = (IsPastExpirationDateFilterBackend,)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-
-    def get_queryset(self):
-        queryset = Bookmark.objects.filter(owner=self.request.user)
-        expired = self.request.query_params.get('expired', None)
-
-        if expired == 'true':
-            queryset = queryset.filter(expiration__lt=datetime.datetime.now())
-        elif expired == 'false':
-            queryset = queryset.filter(expiration__gte=datetime.datetime.now())
-
-        return queryset
 
     @action(detail=True, methods=['put'], serializer_class=TagSerializer)
     def tags(self, request, pk=None):
