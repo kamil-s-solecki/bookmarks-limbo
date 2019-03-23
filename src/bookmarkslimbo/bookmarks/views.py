@@ -75,5 +75,3 @@ class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
     filter_backends = (IsOwnerFilterBackend, )
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
