@@ -28,10 +28,24 @@ class IsPastExpirationDateFilterBackend(filters.BaseFilterBackend):
             return queryset
 
 
+class IsOwnerFilterBackend(filters.BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        return queryset.filter(owner=request.user)
+
+
+class TagsFilterBackend(filters.BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        tags_slug = request.query_params.get('tags', None)
+        if tags_slug is not None:
+            for tag in tags_slug.split(','):
+                queryset = queryset.filter(tags__name=tag)
+        return queryset
+
+
 class BookmarkViewSet(viewsets.ModelViewSet):
     queryset = Bookmark.objects.all()
     serializer_class = BookmarkSerializer
-    filter_backends = (IsPastExpirationDateFilterBackend,)
+    filter_backends = (IsPastExpirationDateFilterBackend, IsOwnerFilterBackend, TagsFilterBackend)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
