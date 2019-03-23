@@ -73,9 +73,7 @@ class BookmarkViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    filter_backends = (IsOwnerFilterBackend, )
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-
-    def get_queryset(self):
-        return Tag.objects.filter(owner=self.request.user)
