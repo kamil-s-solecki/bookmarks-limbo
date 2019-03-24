@@ -8,12 +8,12 @@ database:
     environment:
         POSTGRES_USER: django
 restapi:
-    build: ./src
+    build: ./src/backend
     command: python -m pdb bookmarkslimbo/manage.py runserver 0.0.0.0:8000
     stdin_open: true
     tty: true
     volumes:
-        - ./src:/django
+        - ./src/backend:/django
     ports:
         - "8000:8000"
     links:
