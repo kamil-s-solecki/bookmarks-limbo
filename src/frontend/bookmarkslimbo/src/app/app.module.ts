@@ -9,6 +9,7 @@ import { en_US, NgZorroAntdModule, NZ_I18N } from 'ng-zorro-antd';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
+import { MainComponent } from './main/main.component';
 
 registerLocaleData(en);
 
@@ -16,7 +17,8 @@ registerLocaleData(en);
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,

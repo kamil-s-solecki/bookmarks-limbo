@@ -1,4 +1,7 @@
 <form nz-form [formGroup]="loginForm" class="login-form" (ngSubmit)="submitForm()">
+  <nz-form-control *ngIf="loginFailure" nzValidateStatus="error">
+    <nz-form-explain>Bad credentials!</nz-form-explain>
+  </nz-form-control>
   <nz-form-item>
     <nz-form-control>
       <nz-input-group [nzPrefix]="prefixUser">
