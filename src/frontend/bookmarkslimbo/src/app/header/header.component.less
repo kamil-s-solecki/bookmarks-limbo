@@ -1,0 +1,24 @@
+@import '../../theme.less';
+
+.md-screens(@rules) {
+    @media only screen and (min-width: 768px) {
+        @rules();
+    }
+}
+
+.text-dark {
+    color: @text-color-dark;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+nz-header {
+    .md-screens({
+        p {
+            text-align: center;
+            font-size: 1.7em;
+        }
+    });
+}
