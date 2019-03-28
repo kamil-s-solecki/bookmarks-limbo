@@ -20,4 +20,8 @@ export class AuthService {
       return new Observable(subscriber => subscriber.error());
     }
   }
+
+  logout() {
+    this.user = null;
+  }
 }

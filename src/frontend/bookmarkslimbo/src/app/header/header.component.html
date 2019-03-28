@@ -1,0 +1,7 @@
+<nz-header>
+  <div nz-row nzType="flex" nzJustify="end">
+    <ul nz-menu [nzTheme]="'dark'" [nzMode]="'horizontal'" style="line-height: 64px;">
+      <li *ngIf="isAuthenticated()" nz-menu-item (click)="logout()">logout</li>
+    </ul>
+  </div>
+</nz-header>
