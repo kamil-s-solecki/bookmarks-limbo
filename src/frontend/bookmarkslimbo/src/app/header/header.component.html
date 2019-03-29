@@ -4,10 +4,10 @@
       <span class="underline">b</span>ookma<span class="underline">r</span>ks lim<span class="underline">b</span>o
     </p>
   <div nz-col 
-    [nzXs]="{ span: 8, offset: 6 }" [nzSm]="{ span: 8, offset: 0 }" nzMd="{ span: 8, offset: 0 }">
+    [nzXs]="{ span: 8, offset: 6 }" [nzSm]="{ span: 8, offset: 0 }" [nzMd]="{ span: 8, offset: 0 }">
     <div nz-row nzType="flex" nzJustify="end">
       <ul nz-menu [nzTheme]="'dark'" [nzMode]="'horizontal'" style="line-height: 64px;">
-        <li *ngIf="isAuthenticated() || 'true'" nz-menu-item (click)="logout()">logout</li>
+        <li *ngIf="isAuthenticated()" nz-menu-item (click)="logout()">logout</li>
       </ul>
     </div>
   </div>
