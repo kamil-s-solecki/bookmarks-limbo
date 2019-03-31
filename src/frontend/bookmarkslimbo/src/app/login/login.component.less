@@ -1,9 +1,23 @@
-form {
-    width: 90%;
-    max-width: 550px;
-    margin: auto;
-    margin-top: 3em;
-    .login-form-button {
-        width: 100%;    
+.md-screens(@rules) {
+    @media only screen and (min-width: 768px) {
+        @rules();
+    }
+}
+
+.login-container {
+    height: 100%;
+    form {
+        width: 90%;
+        max-width: 550px;
+        margin: auto;
+        margin-top: 3em;
+
+        .md-screens({
+            margin-top: 5em;
+        });
+
+        .login-form-button {
+            width: 100%;
+        }
     }
 }
