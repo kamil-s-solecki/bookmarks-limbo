@@ -24,7 +24,7 @@ export class BookmarkApi {
     },
     {
       title: "Investing in exclusive toilet paper holders",
-      link: "https://www.how-to-grow.com/trees/lemon",
+      link: "https://www.berich.com/articles/toilet_paper_is_the_new_sexy.php",
       expiration: "2020-05-03T12:40:00Z",
       tags: []
     }

@@ -11,6 +11,8 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
 import { HeaderComponent } from './header/header.component';
+import { BookmarksListComponent } from './bookmarks-list/bookmarks-list.component';
+import { ExpirationCountPipe } from './__pipes/expiration-count.pipe';
 
 registerLocaleData(en);
 
@@ -20,7 +22,9 @@ registerLocaleData(en);
     AppComponent,
     LoginComponent,
     MainComponent,
-    HeaderComponent
+    HeaderComponent,
+    BookmarksListComponent,
+    ExpirationCountPipe
   ],
   imports: [
     BrowserModule,
