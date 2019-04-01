@@ -59,4 +59,18 @@ describe('ExpirationCountPipe', () => {
 
     expect(pipe.expirationCount(now, later)).toBe('less than a minute!');
   });
+
+  it('bug', () => {
+    const later = moment('2020-03-02T12:00:00Z');
+    const now = moment('2019-04-01T18:30:00Z');
+
+    expect(pipe.expirationCount(now, later)).toBe('11 months');
+  });
+
+  it('does not pluralize singular values', () => {
+    const later = moment('2000-02-01');
+    const now = moment('2000-01-01');
+
+    expect(pipe.expirationCount(now, later)).toBe('1 month');
+  });
 });

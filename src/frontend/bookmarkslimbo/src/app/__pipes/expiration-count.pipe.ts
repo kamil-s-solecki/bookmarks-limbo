@@ -26,7 +26,7 @@ export class ExpirationCountPipe implements PipeTransform {
   private diffOrNull(now: moment.Moment, later: moment.Moment, unit: string): string | null {
     const diff = this.diff(now, later, unit);
     return diff > 0
-      ? `${diff} ${unit}s`
+      ? `${diff} ${unit}${diff == 1 ? '' : 's'}`
       : null;
   }
 
@@ -41,8 +41,9 @@ export class ExpirationCountPipe implements PipeTransform {
 
   private daysDiff(now: moment.Moment, later: moment.Moment): number {
     if (later.date() >= now.date()) {
+      const laterYear = later.get('year');
       const laterMonth = later.get('month');
-      return later.diff(moment(now).month(laterMonth), 'day');
+      return later.diff(moment(now).month(laterMonth).year(laterYear), 'day');
     } else {
       return later.date() + (now.daysInMonth() - now.date());
     }
