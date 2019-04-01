@@ -13,9 +13,9 @@ export class ExpirationCountPipe implements PipeTransform {
   }
 
   expirationCount(now: moment.Moment, later: moment.Moment) {
-    const diffs = units.map(unit => this.diffOrNull(now, later, unit))
+    const diffs = units.map(unit => this.diffOrNull(now, later, unit));
     const firstNotNull = diffs.indexOf(diffs.filter(v => null != v)[0]);
-    return firstNotNull != -1
+    return firstNotNull !== -1
       ? [diffs[firstNotNull], diffs[firstNotNull + 1]]
           .filter(v => null != v)
           .reduce((a, b) => `${a}, ${b}`)
@@ -29,7 +29,7 @@ export class ExpirationCountPipe implements PipeTransform {
       ? `${diff} ${unit}s`
       : null;
   }
-  
+
   private diff(now: moment.Moment, later: moment.Moment, unit): number {
     if (unit === 'day') {
       return this.daysDiff(now, later);
@@ -50,10 +50,10 @@ export class ExpirationCountPipe implements PipeTransform {
 
   private modulo(unit): number | null {
     return {
-      'year': null,
-      'month': 12,
-      'hour': 24,
-      'minute': 60,
+      year: null,
+      month: 12,
+      hour: 24,
+      minute: 60,
     }[unit];
   }
 }
