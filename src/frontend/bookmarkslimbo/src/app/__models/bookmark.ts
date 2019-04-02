@@ -6,5 +6,5 @@ export interface Bookmark {
     title: string;
     description?: string;
     expiration: string;
-    tags: Tag[];
+    tags: Tag[] | string[];
 }
