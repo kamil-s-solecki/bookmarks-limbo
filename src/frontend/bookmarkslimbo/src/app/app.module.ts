@@ -13,9 +13,13 @@ import { MainComponent } from './main/main.component';
 import { HeaderComponent } from './header/header.component';
 import { BookmarksListComponent } from './bookmarks-list/bookmarks-list.component';
 import { ExpirationCountPipe } from './__pipes/expiration-count.pipe';
+import { JwtModule } from '@auth0/angular-jwt';
 
 registerLocaleData(en);
 
+export function tokenGetter() {
+  return localStorage.getItem('access_token');
+}
 
 @NgModule({
   declarations: [
@@ -33,7 +37,13 @@ registerLocaleData(en);
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter,
+        whitelistedDomains: ['localhost:8000'],
+      }
+    })
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

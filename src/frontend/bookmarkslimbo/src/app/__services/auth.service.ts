@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { User } from '../__models/user';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Tokens } from '../__models/tokens';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -8,18 +12,16 @@ import { Observable, of } from 'rxjs';
 export class AuthService {
   private user: User | null = null;
 
+  constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {}
+
   isAuthenticated() {
-    // return null !== this.getUser();
-    return true;
+    return null !== this.getUser();
   }
 
   login(username: string, password: string): Observable<any> {
-    if (password === 'password') {
-      this.setUser({ username });
-      return of(null);
-    } else {
-      return new Observable(subscriber => subscriber.error());
-    }
+    console.log('saving');
+    return this.http.post<Tokens>('http://localhost:8000/api/token/', { username, password })
+      .pipe(map(tokens => this.saveTokens(tokens, username)));
   }
 
   public getUser() {
@@ -32,11 +34,18 @@ export class AuthService {
 
   logout() {
     this.user = null;
-    localStorage.removeItem('user');
+    ['user', 'access_token', 'refresh_token']
+      .forEach(key => localStorage.removeItem(key));
   }
 
   private setUser(user: User) {
     this.user = user;
     localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  private saveTokens(tokens: Tokens, username: string) {
+    localStorage.setItem('access_token', tokens.access);
+    localStorage.setItem('refresh_token', tokens.refresh);
+    this.setUser({ username });
   }
 }
