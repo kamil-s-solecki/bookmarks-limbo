@@ -26,7 +26,7 @@ export class ExpirationCountPipe implements PipeTransform {
   private diffOrNull(now: moment.Moment, later: moment.Moment, unit: string): string | null {
     const diff = this.diff(now, later, unit);
     return diff > 0
-      ? `${diff} ${unit}${diff == 1 ? '' : 's'}`
+      ? `${diff} ${unit}${diff === 1 ? '' : 's'}`
       : null;
   }
 
