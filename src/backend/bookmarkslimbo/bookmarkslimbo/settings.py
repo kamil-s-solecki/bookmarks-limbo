@@ -137,3 +137,9 @@ if DEBUG:
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
     CORS_ALLOW_CREDENTIALS = True
+
+
+# Fixtures
+FIXTURE_DIRS = (
+   './fixtures/initial_data.json',
+)
