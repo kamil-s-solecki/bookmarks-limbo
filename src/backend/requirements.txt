@@ -17,3 +17,5 @@ django-cors-headers
 django-allauth
 django-compressor
 djangorestframework_simplejwt
+pylint
+pylint-django
