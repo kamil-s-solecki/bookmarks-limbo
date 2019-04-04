@@ -19,7 +19,6 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<any> {
-    console.log('saving');
     return this.http.post<Tokens>('http://localhost:8000/api/token/', { username, password })
       .pipe(map(tokens => this.saveTokens(tokens, username)));
   }
