@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Bookmark } from '../__models/bookmark';
 import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { apiUrl } from '../__utils/urls';
 
 @Injectable({
   providedIn: 'root'
@@ -30,9 +32,9 @@ export class BookmarkApi {
     }
   ];
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   getList(): Observable<Bookmark[]> {
-    return of(this.bookmarks);
+    return this.http.get<Bookmark[]>(apiUrl('bookmarks/'));
   }
 }
