@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Tokens } from '../__models/tokens';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { apiUrl } from '../__utils/urls';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post<Tokens>('http://localhost:8000/api/token/', { username, password })
+    return this.http.post<Tokens>(apiUrl('token/'), { username, password })
       .pipe(map(tokens => this.saveTokens(tokens, username)));
   }
 
