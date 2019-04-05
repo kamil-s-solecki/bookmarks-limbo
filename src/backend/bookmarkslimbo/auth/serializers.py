@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from rest_framework import serializers, fields, validators
+from rest_framework import serializers, fields
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-    def validate_password(self, value):
+    def validate_password(self, value):  # pylint: disable=no-self-use
         try:
             validate_password(value)
         except ValidationError as exc:

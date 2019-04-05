@@ -22,10 +22,10 @@ class IsPastExpirationDateFilterBackend(filters.BaseFilterBackend):
 
         if expired == 'true':
             return queryset.filter(expiration__lt=datetime.datetime.now())
-        elif expired == 'false':
+        if expired == 'false':
             return queryset.filter(expiration__gte=datetime.datetime.now())
-        else:
-            return queryset
+
+        return queryset
 
 
 class IsOwnerFilterBackend(filters.BaseFilterBackend):
@@ -51,16 +51,16 @@ class BookmarkViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
     @action(detail=True, methods=['put'], serializer_class=TagSerializer)
-    def tags(self, request, pk=None):
+    def tags(self, request, pk=None):  # pylint: disable=invalid-name
         bookmark = self.get_object()
         if request.data['name']:
             tag = self._get_tag(request.data['name'])
             bookmark.tags.add(tag)
             bookmark.save()
             return Response(data=bookmark)
-        else:
-            return Response('name is required',
-                            status=status.HTTP_400_BAD_REQUEST)
+
+        return Response('name is required',
+                        status=status.HTTP_400_BAD_REQUEST)
 
     def _get_tag(self, name):
         tag = Tag.objects.filter(name=name).first()
@@ -73,5 +73,4 @@ class BookmarkViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    filter_backends = (IsOwnerFilterBackend, )
-
+    filter_backends = (IsOwnerFilterBackend,)

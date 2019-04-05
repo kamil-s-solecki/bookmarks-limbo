@@ -131,15 +131,15 @@ REST_FRAMEWORK = {
 }
 
 if DEBUG:
-    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'].insert(0, 'rest_framework.authentication.BasicAuthentication')
+    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] \
+        .insert(0, 'rest_framework.authentication.BasicAuthentication')
 
 # CORS
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
     CORS_ALLOW_CREDENTIALS = True
 
-
 # Fixtures
 FIXTURE_DIRS = (
-   './fixtures/initial_data.json',
+    './fixtures/initial_data.json',
 )

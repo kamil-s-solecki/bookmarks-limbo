@@ -20,4 +20,3 @@ class Bookmark(models.Model):
 
     class Meta:
         ordering = ('expiration',)
-
