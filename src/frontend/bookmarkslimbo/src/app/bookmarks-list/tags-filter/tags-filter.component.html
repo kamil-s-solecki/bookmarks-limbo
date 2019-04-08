@@ -1,0 +1,5 @@
+<div *ngIf="filterTags.length > 0">
+  <i nz-icon [nzType]="'tags'" [nzTheme]="'outline'"></i>
+  <nz-tag *ngFor="let tag of filterTags"
+    nzMode="closeable" (nzOnClose)="onClose(tag)">{{ tag }}</nz-tag>  
+</div>

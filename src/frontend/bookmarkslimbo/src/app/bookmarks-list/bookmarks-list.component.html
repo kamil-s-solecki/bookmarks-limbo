@@ -1,5 +1,6 @@
+<app-tags-filter></app-tags-filter>
 <nz-card *ngFor="let bookmark of bookmarks" [nzBordered]="false" nzTitle="{{ bookmark.title }}">
-  <p><nz-tag *ngFor="let tag of bookmark.tags">{{ tag }}</nz-tag></p>
+  <p><nz-tag *ngFor="let tag of bookmark.tags" (click)="onTagClick(tag)">{{ tag }}</nz-tag></p>
   <p><a href="{{ bookmark.link }}">{{ bookmark.link }}</a></p>
   <p>{{ bookmark.description }}</p>
   <p>expires in: {{ bookmark.expiration | expirationCount }}</p>

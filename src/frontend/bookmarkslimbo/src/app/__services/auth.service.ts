@@ -12,7 +12,7 @@ import { apiUrl } from '../__utils/urls';
 })
 export class AuthService {
   private user: User | null = null;
-  
+
   isRefreshing = false;
 
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {}
