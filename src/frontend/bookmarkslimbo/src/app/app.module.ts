@@ -1,5 +1,5 @@
 import { registerLocaleData } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import en from '@angular/common/locales/en';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +14,7 @@ import { HeaderComponent } from './header/header.component';
 import { BookmarksListComponent } from './bookmarks-list/bookmarks-list.component';
 import { ExpirationCountPipe } from './__pipes/expiration-count.pipe';
 import { JwtModule } from '@auth0/angular-jwt';
+import { JwtRefreshInterceptorService } from './__services/jwt-refresh-interceptor.service';
 
 registerLocaleData(en);
 
@@ -47,6 +48,11 @@ export function tokenGetter() {
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtRefreshInterceptorService,
+      multi: true,
+    }
   ],
   bootstrap: [AppComponent]
 })

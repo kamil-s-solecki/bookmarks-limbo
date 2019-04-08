@@ -12,6 +12,8 @@ import { apiUrl } from '../__utils/urls';
 })
 export class AuthService {
   private user: User | null = null;
+  
+  isRefreshing = false;
 
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {}
 
@@ -24,7 +26,17 @@ export class AuthService {
       .pipe(map(tokens => this.saveTokens(tokens, username)));
   }
 
-  public getUser() {
+  refresh(): Observable<any> {
+    this.isRefreshing = true;
+    const refresh = localStorage.getItem('refresh_token');
+    return this.http.post<Tokens>(apiUrl('token/refresh/'), { refresh })
+      .pipe(map(tokens => {
+        this.isRefreshing = false;
+        this.saveTokens(tokens);
+      }));
+  }
+
+  getUser() {
     if (!this.user) {
       const userSlug = localStorage.getItem('user');
       this.user = userSlug ? JSON.parse(userSlug) : null;
@@ -38,14 +50,24 @@ export class AuthService {
       .forEach(key => localStorage.removeItem(key));
   }
 
+  isTokenExpiredButHasValidrefreshToken() {
+    const token = localStorage.getItem('access_token');
+    const refresh = localStorage.getItem('refresh_token');
+    return token && refresh && this.jwtHelper.isTokenExpired(token) && !this.jwtHelper.isTokenExpired(refresh);
+  }
+
   private setUser(user: User) {
     this.user = user;
     localStorage.setItem('user', JSON.stringify(user));
   }
 
-  private saveTokens(tokens: Tokens, username: string) {
+  private saveTokens(tokens: Tokens, username?: string) {
     localStorage.setItem('access_token', tokens.access);
-    localStorage.setItem('refresh_token', tokens.refresh);
-    this.setUser({ username });
+    if (tokens.refresh) {
+      localStorage.setItem('refresh_token', tokens.refresh);
+    }
+    if (username) {
+      this.setUser({ username });
+    }
   }
 }
