@@ -14,6 +14,14 @@ class TagSerializer(serializers.ModelSerializer):
 
 class BookmarkSerializer(serializers.ModelSerializer):
     tags = serializers.SlugRelatedField(slug_field='name', read_only=True, many=True)
+
+    class Meta:
+        model = Bookmark
+        fields = ('id', 'title', 'description', 'link', 'expiration', 'tags')
+
+
+class BookmarkCreateUpdateSerializer(serializers.ModelSerializer):
+    tags = serializers.ListField(child=serializers.CharField(), write_only=True)
     owner = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:

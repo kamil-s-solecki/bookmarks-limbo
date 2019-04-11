@@ -5,3 +5,6 @@
   <p>{{ bookmark.description }}</p>
   <p>expires in: {{ bookmark.expiration | expirationCount }}</p>
 </nz-card>
+<button nz-button nzType="primary" [nzSize]="'large'" nzShape="circle" (click)="add()">
+  <i nz-icon type="plus"></i>
+</button>

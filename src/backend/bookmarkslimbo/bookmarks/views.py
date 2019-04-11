@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 from bookmarks.models import Bookmark, Tag
-from bookmarks.serializers import BookmarkSerializer, TagSerializer
+from bookmarks.serializers import BookmarkSerializer, TagSerializer, BookmarkCreateUpdateSerializer
 
 
 @api_view(['GET'])
@@ -44,11 +44,11 @@ class TagsFilterBackend(filters.BaseFilterBackend):
 
 class BookmarkViewSet(viewsets.ModelViewSet):
     queryset = Bookmark.objects.all()
-    serializer_class = BookmarkSerializer
     filter_backends = (IsPastExpirationDateFilterBackend, IsOwnerFilterBackend, TagsFilterBackend)
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        tags = [self._get_tag(tag) for tag in serializer.validated_data['tags']]
+        serializer.save(owner=self.request.user, tags=tags)
 
     @action(detail=True, methods=['put'], serializer_class=TagSerializer)
     def tags(self, request, pk=None):  # pylint: disable=invalid-name
@@ -61,6 +61,9 @@ class BookmarkViewSet(viewsets.ModelViewSet):
 
         return Response('name is required',
                         status=status.HTTP_400_BAD_REQUEST)
+
+    def get_serializer_class(self):
+        return BookmarkCreateUpdateSerializer if self.request.method in ['POST', 'PUT'] else BookmarkSerializer
 
     def _get_tag(self, name):
         tag = Tag.objects.filter(name=name).first()

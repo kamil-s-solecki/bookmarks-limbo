@@ -1,0 +1,76 @@
+<nz-card [nzBordered]="false" nzTitle="Let's add a new bookmark!" [nzActions]="[actionSubmit, actionCancel]">
+  <div class="tags">
+    <nz-tag
+      *ngFor="let tag of tags"
+      [nzMode]="'closeable'"
+      (nzAfterClose)="handleTagClose(tag)"
+    >{{ tag }}</nz-tag>
+    
+    <nz-tag *ngIf="!inputTagVisible" class="editable-tag" nzNoAnimation (click)="showTagInput()">
+      <i nz-icon type="plus"></i> New Tag
+    </nz-tag>
+    <input
+      #inputTagElement
+      nz-input
+      nzSize="small"
+      *ngIf="inputTagVisible"
+      type="text"
+      [(ngModel)]="inputTagValue"
+      style="width: 78px;"
+      (blur)="handleInputTagConfirm()"
+      (keydown.enter)="handleInputTagConfirm()"
+    />
+  </div>
+
+  <form nz-form [formGroup]="bookmarkForm" (ngSubmit)="submitForm()">
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Title</nz-form-label>
+      <nz-form-control>
+        <nz-input-group>
+          <input type="text" nz-input formControlName="title" placeholder="Title" />
+        </nz-input-group>
+        <nz-form-explain *ngIf="bookmarkForm.get('title')?.dirty && bookmarkForm.get('title')?.errors"
+          >Please input a title!</nz-form-explain
+        >
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Url</nz-form-label>
+      <nz-form-control>
+        <nz-input-group>
+          <input type="text" nz-input formControlName="link" placeholder="Url" />
+        </nz-input-group>
+        <nz-form-explain *ngIf="bookmarkForm.get('link')?.dirty && bookmarkForm.get('link')?.errors"
+          >Please input a valid url!</nz-form-explain
+        >
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Descritpion</nz-form-label>
+      <nz-form-control>
+        <nz-input-group>
+          <textarea type="text" nz-input rows="2" formControlName="description" placeholder="Description"></textarea>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Expiration date</nz-form-label>
+      <nz-form-control>
+        <nz-date-picker nzShowTime formControlName="expiration"></nz-date-picker>
+      </nz-form-control>
+    </nz-form-item>
+
+  </form>
+</nz-card>
+
+<ng-template #actionSubmit>
+  <i nz-icon type="check" (click)="submit()"></i>
+</ng-template>
+
+<ng-template #actionCancel>
+  <i nz-icon type="close-square" (click)="cancel()"></i>
+</ng-template>

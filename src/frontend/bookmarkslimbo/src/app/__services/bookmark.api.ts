@@ -18,4 +18,8 @@ export class BookmarkApi {
     }
     return this.http.get<Bookmark[]>(apiUrl('bookmarks/'), { params });
   }
+
+  post(bookmark: Bookmark): Observable<Bookmark> {
+    return this.http.post<Bookmark>(apiUrl('bookmarks/'), bookmark);
+  }
 }

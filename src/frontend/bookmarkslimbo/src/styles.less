@@ -6,8 +6,14 @@
     }
 }
 
-.md-screens(@rules) {
-    @media only screen and (min-width: 768px) {
+.lg-to-xl-screens(@rules) {
+    @media only screen and (min-width: 992px) and (max-width: 1199px) {
+        @rules();
+    }
+}
+
+.xl-screens(@rules) {
+    @media only screen and (min-width: 1200px) {
         @rules();
     }
 }

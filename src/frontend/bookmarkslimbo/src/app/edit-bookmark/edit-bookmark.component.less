@@ -1,0 +1,35 @@
+@import '../../styles.less';
+
+@radius: 8px;
+
+nz-card {
+    .lg-to-xl-screens({
+        width: 80%;
+        margin: auto;
+    });
+    .xl-screens({
+        width: 70%;
+        margin: auto;
+    });
+
+    margin-bottom: 2em;
+    border-radius: @radius !important;
+
+    input, textarea {
+        border-radius: @radius !important;
+    }
+
+
+    .tags {
+        margin-bottom: 1em;
+        
+        nz-tag {
+            margin-bottom: .4em;
+        }
+
+        .editable-tag {
+            background: rgb(255, 255, 255);
+            border-style: dashed;
+        }
+    }
+}

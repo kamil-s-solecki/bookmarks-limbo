@@ -2,10 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth-guard.service';
-import { MainComponent } from './main/main.component';
+import { EditBookmarkComponent } from './edit-bookmark/edit-bookmark.component';
+import { BookmarksListComponent } from './bookmarks-list/bookmarks-list.component';
 
 const routes: Routes = [
-  { path: '', component: MainComponent, canActivate: [AuthGuard] },
+  { path: '', component: BookmarksListComponent, canActivate: [AuthGuard] },
+  { path: 'bookmark/add', component: EditBookmarkComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent }
 ];
 
