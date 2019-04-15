@@ -22,4 +22,8 @@ export class BookmarkApi {
   post(bookmark: Bookmark): Observable<Bookmark> {
     return this.http.post<Bookmark>(apiUrl('bookmarks/'), bookmark);
   }
+
+  put(bookmark: Bookmark): Observable<Bookmark> {
+    return this.http.put<Bookmark>(apiUrl(`bookmarks/${bookmark.id}/`), bookmark);
+  }
 }

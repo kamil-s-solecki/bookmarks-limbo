@@ -8,6 +8,7 @@ import { BookmarksListComponent } from './bookmarks-list/bookmarks-list.componen
 const routes: Routes = [
   { path: '', component: BookmarksListComponent, canActivate: [AuthGuard] },
   { path: 'bookmark/add', component: EditBookmarkComponent, canActivate: [AuthGuard] },
+  { path: 'bookmark/:id/edit', component: EditBookmarkComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent }
 ];
 

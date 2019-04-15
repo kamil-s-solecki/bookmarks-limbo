@@ -3,6 +3,7 @@ import { BookmarkApi } from '../__services/bookmark.api';
 import { Bookmark } from '../__models/bookmark';
 import { FilterTagsService } from '../__services/filter-tags.service';
 import { Router } from '@angular/router';
+import { BookmarkService } from '../__services/bookmark.service';
 
 @Component({
   selector: 'app-bookmarks-list',
@@ -13,18 +14,12 @@ export class BookmarksListComponent implements OnInit {
   bookmarks: Bookmark[];
   editing = false;
 
-  constructor(private bookmarkApi: BookmarkApi,
+  constructor(private bookmarkService: BookmarkService,
               private filterTagsService: FilterTagsService,
               private router: Router) { }
 
   ngOnInit() {
-    this.fetchBookmarks();
-    this.filterTagsService.onChange(_ => this.fetchBookmarks());
-  }
-
-  private fetchBookmarks() {
-    this.bookmarkApi.getList(this.filterTags)
-      .subscribe(bookmarks => this.bookmarks = bookmarks);
+    this.bookmarkService.subscribe(bookmarks => this.bookmarks = bookmarks);
   }
 
   get filterTags() {

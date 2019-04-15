@@ -1,10 +1,24 @@
 <app-tags-filter></app-tags-filter>
-<nz-card *ngFor="let bookmark of bookmarks" [nzBordered]="false" nzTitle="{{ bookmark.title }}">
-  <p><nz-tag *ngFor="let tag of bookmark.tags" (click)="onTagClick(tag)">{{ tag }}</nz-tag></p>
-  <p><a href="{{ bookmark.link }}">{{ bookmark.link }}</a></p>
-  <p>{{ bookmark.description }}</p>
-  <p>expires in: {{ bookmark.expiration | expirationCount }}</p>
-</nz-card>
+
+<div *ngFor="let bookmark of bookmarks">
+  <nz-card [nzBordered]="false" [nzExtra]="extra" nzTitle="{{ bookmark.title }}">
+    <p><nz-tag *ngFor="let tag of bookmark.tags" (click)="onTagClick(tag)">{{ tag }}</nz-tag></p>
+    <p><a href="{{ bookmark.link }}">{{ bookmark.link }}</a></p>
+    <p>{{ bookmark.description }}</p>
+    <p>expires in: {{ bookmark.expiration | expirationCount }}</p>
+  </nz-card>
+
+  <ng-template #extra>
+    <nz-dropdown [nzPlacement]="'bottomRight'" [nzTrigger]="'click'">
+      <i nz-dropdown nz-icon type="ellipsis"></i>
+      <ul nz-menu>
+        <li nz-menu-item routerLink="/bookmark/{{ bookmark.id }}/edit">Edit</li>
+        <li nz-menu-item>Delete</li>
+      </ul>
+    </nz-dropdown>
+  </ng-template>
+</div>
+
 <button nz-button nzType="primary" [nzSize]="'large'" nzShape="circle" (click)="add()">
   <i nz-icon type="plus"></i>
 </button>

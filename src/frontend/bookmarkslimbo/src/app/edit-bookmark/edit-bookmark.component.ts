@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
 import { Bookmark } from '../__models/bookmark';
 import { BookmarkApi } from '../__services/bookmark.api';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
+import { BookmarkService } from '../__services/bookmark.service';
 
 const urlReg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
@@ -12,7 +14,6 @@ const urlReg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
   styleUrls: ['./edit-bookmark.component.less']
 })
 export class EditBookmarkComponent implements OnInit {
-
   bookmarkForm: FormGroup;
 
   tags: string[] = [];
@@ -20,9 +21,13 @@ export class EditBookmarkComponent implements OnInit {
   inputTagValue = '';
   @ViewChild('inputTagElement') inputTagElement: ElementRef;
 
+  private id: number | null = null;
+
   constructor(private formBuilder: FormBuilder,
               private router: Router,
-              private bookmarkApi: BookmarkApi) { }
+              private bookmarkApi: BookmarkApi,
+              private bookmarkService: BookmarkService,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.bookmarkForm = this.formBuilder.group({
@@ -31,6 +36,7 @@ export class EditBookmarkComponent implements OnInit {
       description: [null, []],
       expiration: [null, [Validators.required]],
     });
+    this.fetchBookmark();
   }
 
   showTagInput(): void {
@@ -52,6 +58,10 @@ export class EditBookmarkComponent implements OnInit {
     this.tags = this.tags.filter(tag => tag !== removedTag);
   }
 
+  get cardAction(): string {
+    return this.id ? 'edit' : 'add';
+  }
+
   cancel() {
     this.router.navigateByUrl('');
   }
@@ -61,11 +71,24 @@ export class EditBookmarkComponent implements OnInit {
       Object.keys(this.bookmarkForm.controls).forEach(field => {
         this.bookmarkForm.get(field).markAsTouched({ onlySelf: true });
         this.bookmarkForm.get(field).updateValueAndValidity({ onlySelf: true });
-      })
+      });
       return;
     }
     const bookmark = this.bookmarkForm.value as Bookmark;
     bookmark.tags = this.tags;
-    this.bookmarkApi.post(bookmark).subscribe(_ => this.router.navigateByUrl(''));
+    bookmark.id = this.id;
+    this.bookmarkService.push(bookmark).subscribe(_ => this.router.navigateByUrl(''));
+  }
+
+  private fetchBookmark() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id === null) {
+      return;
+    }
+    this.id = +id;
+    this.bookmarkService.getById(this.id).subscribe(bookmark => {
+      this.bookmarkForm.patchValue(bookmark);
+      this.tags = bookmark.tags as string[];
+    });
   }
 }

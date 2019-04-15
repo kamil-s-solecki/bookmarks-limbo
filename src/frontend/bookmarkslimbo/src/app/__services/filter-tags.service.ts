@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { BookmarkService } from './bookmark.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +9,12 @@ export class FilterTagsService {
 
   private _filterTags: string[];
 
-  private onChange$: Subject<string[]> = new Subject();
-
-  constructor(private activatedRoute: ActivatedRoute, private router: Router) {
-    this.activatedRoute.queryParams.subscribe(params => {
-      this._filterTags = (params.tags || '').split(',').filter(v => !!v);
-    });
+  constructor(private activatedRoute: ActivatedRoute,
+              private router: Router,
+              private bookmarksService: BookmarkService) {
+      this.activatedRoute.queryParams.subscribe(params => {
+        this._filterTags = (params.tags || '').split(',').filter(v => !!v);
+      });
   }
 
   get filterTags() {
@@ -22,8 +22,11 @@ export class FilterTagsService {
   }
 
   remove(tag) {
+    if (this._filterTags.indexOf(tag) === -1) {
+      return;
+    }
     this._filterTags = this._filterTags.filter(t => t !== tag);
-    this.navigate();
+    this.refreshAndNavigate();
   }
 
   add(tag) {
@@ -31,16 +34,12 @@ export class FilterTagsService {
       return;
     }
     this._filterTags.push(tag);
-    this.navigate();
+    this.refreshAndNavigate();
   }
 
-  private navigate() {
+  private refreshAndNavigate() {
+    this.bookmarksService.refresh(this._filterTags);
     const queryParams: Params = { tags: this._filterTags.join(',') };
     this.router.navigate([''], { queryParams });
-    this.onChange$.next(this._filterTags);
-  }
-
-  onChange(next: (value: string[]) => void) {
-    this.onChange$.subscribe(next, null, null);
   }
 }

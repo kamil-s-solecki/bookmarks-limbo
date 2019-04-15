@@ -47,8 +47,10 @@ class BookmarkViewSet(viewsets.ModelViewSet):
     filter_backends = (IsPastExpirationDateFilterBackend, IsOwnerFilterBackend, TagsFilterBackend)
 
     def perform_create(self, serializer):
-        tags = [self._get_tag(tag) for tag in serializer.validated_data['tags']]
-        serializer.save(owner=self.request.user, tags=tags)
+        self._perform_update_or_create(serializer)
+
+    def perform_update(self, serializer):
+        self._perform_update_or_create(serializer)
 
     @action(detail=True, methods=['put'], serializer_class=TagSerializer)
     def tags(self, request, pk=None):  # pylint: disable=invalid-name
@@ -71,6 +73,10 @@ class BookmarkViewSet(viewsets.ModelViewSet):
             tag = Tag.objects.create(name=name, owner=self.request.user)
             tag.save()
         return tag
+
+    def _perform_update_or_create(self, serializer):
+        tags = [self._get_tag(tag) for tag in serializer.validated_data['tags']]
+        serializer.save(owner=self.request.user, tags=tags)
 
 
 class TagViewSet(viewsets.ModelViewSet):

@@ -1,4 +1,4 @@
-<nz-card [nzBordered]="false" nzTitle="Let's add a new bookmark!" [nzActions]="[actionSubmit, actionCancel]">
+<nz-card [nzBordered]="false" nzTitle="Let's {{ cardAction }} a bookmark!" [nzActions]="[actionSubmit, actionCancel]">
   <div class="tags">
     <nz-tag
       *ngFor="let tag of tags"
