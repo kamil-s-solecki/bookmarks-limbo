@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Bookmark } from '../__models/bookmark';
-import { BookmarkApi } from '../__services/bookmark.api';
-import { Subject, Observable, BehaviorSubject } from 'rxjs';
-import { BookmarkService } from '../__services/bookmark.service';
+import { QueryBus } from '../__services/query-handler/query-bus.service';
+import { BookmarkQuery } from '../__services/query/bookmark.query';
+import { Observable } from 'rxjs';
+import { CommandBus } from '../__services/command-handler/command-bus.service';
+import { AddOrUpdateBookmark } from '../__services/command/add-or-update-bookmark.command';
 
 const urlReg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
@@ -25,8 +27,8 @@ export class EditBookmarkComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private router: Router,
-              private bookmarkApi: BookmarkApi,
-              private bookmarkService: BookmarkService,
+              private commandBus: CommandBus,
+              private queryBus: QueryBus,
               private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -77,7 +79,7 @@ export class EditBookmarkComponent implements OnInit {
     const bookmark = this.bookmarkForm.value as Bookmark;
     bookmark.tags = this.tags;
     bookmark.id = this.id;
-    this.bookmarkService.push(bookmark).subscribe(_ => this.router.navigateByUrl(''));
+    this.commandBus.execute(new AddOrUpdateBookmark(bookmark));
   }
 
   private fetchBookmark() {
@@ -86,9 +88,10 @@ export class EditBookmarkComponent implements OnInit {
       return;
     }
     this.id = +id;
-    this.bookmarkService.getById(this.id).subscribe(bookmark => {
-      this.bookmarkForm.patchValue(bookmark);
-      this.tags = bookmark.tags as string[];
-    });
+    this.queryBus.query<Observable<Bookmark>>(new BookmarkQuery(this.id))
+      .subscribe(bookmark => {
+        this.bookmarkForm.patchValue(bookmark);
+        this.tags = bookmark.tags as string[];
+      });
   }
 }

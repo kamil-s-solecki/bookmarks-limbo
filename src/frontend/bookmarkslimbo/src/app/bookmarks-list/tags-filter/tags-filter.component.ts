@@ -1,20 +1,24 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FilterTagsService } from 'src/app/__services/filter-tags.service';
+import { CommandBus } from 'src/app/__services/command-handler/command-bus.service';
+import { RemoveFilterTag } from 'src/app/__services/command/remove-filter-tag.command';
+import { FilterTagsState } from 'src/app/__services/state/filter-tags-state';
 
 @Component({
   selector: 'app-tags-filter',
   templateUrl: './tags-filter.component.html',
   styleUrls: ['./tags-filter.component.less']
 })
-export class TagsFilterComponent {
+export class TagsFilterComponent implements OnInit {
+  filterTags: string[] = [];
 
-  constructor(private filterTagsService: FilterTagsService) {}
+  constructor(private commandBus: CommandBus,
+              private filterTagsState: FilterTagsState) {}
 
-  onClose(tag: string) {
-    this.filterTagsService.remove(tag);
+  ngOnInit() {
+    this.filterTagsState.subscribe(tags => this.filterTags = tags);
   }
 
-  get filterTags() {
-    return this.filterTagsService.filterTags;
+  onClose(tag: string) {
+    this.commandBus.execute(new RemoveFilterTag(tag));
   }
 }

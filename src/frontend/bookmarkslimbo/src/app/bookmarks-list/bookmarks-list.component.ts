@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { BookmarkApi } from '../__services/bookmark.api';
 import { Bookmark } from '../__models/bookmark';
-import { FilterTagsService } from '../__services/filter-tags.service';
 import { Router } from '@angular/router';
-import { BookmarkService } from '../__services/bookmark.service';
+import { BookmarksState } from '../__services/state/bookmarks-state';
+import { CommandBus } from '../__services/command-handler/command-bus.service';
+import { AddFilterTag } from '../__services/command/add-filter-tag.command';
+import { FilterTagsState } from '../__services/state/filter-tags-state';
 
 @Component({
   selector: 'app-bookmarks-list',
@@ -12,22 +13,20 @@ import { BookmarkService } from '../__services/bookmark.service';
 })
 export class BookmarksListComponent implements OnInit {
   bookmarks: Bookmark[];
-  editing = false;
+  filterTags = [];
 
-  constructor(private bookmarkService: BookmarkService,
-              private filterTagsService: FilterTagsService,
+  constructor(private bookmarksState: BookmarksState,
+              private commandBus: CommandBus,
+              private filterTagsState: FilterTagsState,
               private router: Router) { }
 
   ngOnInit() {
-    this.bookmarkService.subscribe(bookmarks => this.bookmarks = bookmarks);
-  }
-
-  get filterTags() {
-    return this.filterTagsService.filterTags;
+    this.filterTagsState.subscribe(tags => this.filterTags = tags);
+    this.bookmarksState.subscribe(bookmarks => this.bookmarks = bookmarks);
   }
 
   onTagClick(tag: string) {
-    this.filterTagsService.add(tag);
+    this.commandBus.execute(new AddFilterTag(tag));
   }
 
   add() {
