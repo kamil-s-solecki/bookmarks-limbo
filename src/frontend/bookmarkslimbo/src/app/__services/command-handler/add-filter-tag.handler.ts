@@ -21,10 +21,12 @@ export class AddFilterTagHandler implements CommandHandler {
   }
 
   private refreshAndNavigate(updatedTags: string[]) {
-    const queryParams: Params = { tags: updatedTags.join(',') };
-    this.router.navigate([''], { queryParams });
     this.bookmarkApi.getList(updatedTags)
-      .subscribe(bookmarks => this.bookmarksState.update(bookmarks));
+      .subscribe(bookmarks => {
+        this.bookmarksState.update(bookmarks);
+        const queryParams: Params = { tags: updatedTags.join(',') };
+        this.router.navigate([''], { queryParams });
+      });
   }
 
   supports(name: string): boolean {
