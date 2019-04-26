@@ -13,7 +13,7 @@
       <i nz-dropdown nz-icon type="ellipsis"></i>
       <ul nz-menu>
         <li nz-menu-item routerLink="/bookmark/{{ bookmark.id }}/edit">Edit</li>
-        <li nz-menu-item>Delete</li>
+        <li nz-menu-item (click)="delete(bookmark)">Delete</li>
       </ul>
     </nz-dropdown>
   </ng-template>

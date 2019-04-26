@@ -30,4 +30,8 @@ export class BookmarkApi {
   put(bookmark: Bookmark): Observable<Bookmark> {
     return this.http.put<Bookmark>(apiUrl(`bookmarks/${bookmark.id}/`), bookmark);
   }
+
+  delete(bookmark: Bookmark): Observable<any> {
+    return this.http.delete<any>(apiUrl(`bookmarks/${bookmark.id}/`));
+  }
 }
