@@ -1,15 +1,13 @@
 import { CommandHandler } from './command-handler';
 import { AddFilterTag } from '../command/add-filter-tag.command';
 import { FilterTagsState } from '../state/filter-tags-state';
-import { Params, Router } from '@angular/router';
 import { BookmarksState } from '../state/bookmarks-state';
-import { BookmarkApi } from '../bookmark.api';
+import { RoutingService } from '../routing.service';
 
 export class RemoveFilterTagHandler implements CommandHandler {
-  constructor(private bookmarkApi: BookmarkApi,
-              private bookmarksState: BookmarksState,
+  constructor(private bookmarksState: BookmarksState,
               private filterTagState: FilterTagsState,
-              private router: Router) {}
+              private routingService: RoutingService) {}
 
   handle(command: AddFilterTag) {
     if (this.filterTagState.latest.indexOf(command.tag) === -1) {
@@ -17,14 +15,11 @@ export class RemoveFilterTagHandler implements CommandHandler {
     }
     const updatedTags = this.filterTagState.latest.filter(tag => tag !== command.tag);
     this.filterTagState.update(updatedTags);
-    this.refreshAndNavigate(updatedTags);
+    this.refreshAndNavigate();
   }
 
-  private refreshAndNavigate(updatedTags: string[]) {
-    const queryParams: Params = { tags: updatedTags.join(',') };
-    this.router.navigate([''], { queryParams });
-    this.bookmarkApi.getList(updatedTags)
-      .subscribe(bookmarks => this.bookmarksState.update(bookmarks));
+  private refreshAndNavigate() {
+    this.bookmarksState.refresh(() => this.routingService.navigateToList());
   }
 
   supports(name: string): boolean {

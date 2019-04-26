@@ -1,15 +1,13 @@
 import { CommandHandler } from './command-handler';
-import { FilterTagsState } from '../state/filter-tags-state';
-import { Params, Router } from '@angular/router';
 import { BookmarksState } from '../state/bookmarks-state';
 import { BookmarkApi } from '../bookmark.api';
 import { AddOrUpdateBookmark } from '../command/add-or-update-bookmark.command';
+import { RoutingService } from '../routing.service';
 
 export class AddOrUpdateBookmarkHandler implements CommandHandler {
   constructor(private bookmarkApi: BookmarkApi,
               private bookmarksState: BookmarksState,
-              private filterTagsState: FilterTagsState,
-              private router: Router) {}
+              private routingService: RoutingService) {}
 
   handle(command: AddOrUpdateBookmark) {
     const apiCall = command.bookmark.id
@@ -19,12 +17,7 @@ export class AddOrUpdateBookmarkHandler implements CommandHandler {
   }
 
   private refreshAndNavigate() {
-    this.bookmarkApi.getList(this.filterTagsState.latest)
-      .subscribe(bookmarks => {
-        this.bookmarksState.update(bookmarks);
-        const queryParams: Params = { tags: this.filterTagsState.latest.join(',') };
-        this.router.navigate([''], { queryParams });
-      });
+    this.bookmarksState.refresh(() => this.routingService.navigateToList());
   }
 
   supports(name: string): boolean {
