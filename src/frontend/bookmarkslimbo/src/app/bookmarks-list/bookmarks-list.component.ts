@@ -50,6 +50,10 @@ export class BookmarksListComponent implements OnInit {
     this.modalConfirm('Wow! Did you really do it?', 'primary', onOk);
   }
 
+  open(url) {
+    window.open(url, '_blank');
+  }
+
   private modalConfirm(title: string, okType: string, onOk: () => void) {
     this.modalService.confirm({
       nzTitle: title,

@@ -1,12 +1,18 @@
 <app-tags-filter></app-tags-filter>
 
 <div *ngFor="let bookmark of bookmarks">
-  <nz-card [nzBordered]="false" [nzExtra]="extra" nzTitle="{{ bookmark.title }}">
+  <nz-card [nzBordered]="false" [nzExtra]="extra" [nzTitle]="title">
     <p><nz-tag *ngFor="let tag of bookmark.tags" (click)="onTagClick(tag)">{{ tag }}</nz-tag></p>
     <p><a href="{{ bookmark.link }}">{{ bookmark.link }}</a></p>
     <p>{{ bookmark.description }}</p>
     <p>expires in: {{ bookmark.expiration | expirationCount }}</p>
   </nz-card>
+
+  <ng-template #title>
+    <span (click)="open(bookmark.link)" class="clickable">
+      {{ bookmark.title }}
+    </span>
+  </ng-template>
 
   <ng-template #extra>
     <nz-dropdown [nzPlacement]="'bottomRight'" [nzTrigger]="'click'">
