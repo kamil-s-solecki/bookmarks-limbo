@@ -37,11 +37,21 @@ export class BookmarksListComponent implements OnInit {
   }
 
   delete(bookmark: Bookmark) {
+    const onOk = () => this.commandBus.execute(new DeleteBookmark(bookmark));
+    this.modalConfirm('Are you sure?', 'danger', onOk);
+  }
+
+  done(bookmark: Bookmark) {
+    const onOk = () => this.commandBus.execute(new DeleteBookmark(bookmark));
+    this.modalConfirm('Wow! Did you really do it?', 'primary', onOk);
+  }
+
+  private modalConfirm(title: string, okType: string, onOk: () => void) {
     this.modalService.confirm({
-      nzTitle: 'Are you sure?',
+      nzTitle: title,
       nzOkText: 'Yes',
-      nzOkType: 'danger',
-      nzOnOk: () => this.commandBus.execute(new DeleteBookmark(bookmark)),
+      nzOkType: okType,
+      nzOnOk: onOk,
       nzCancelText: 'No',
     });
   }

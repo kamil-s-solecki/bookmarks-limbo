@@ -12,6 +12,7 @@
     <nz-dropdown [nzPlacement]="'bottomRight'" [nzTrigger]="'click'">
       <i nz-dropdown nz-icon type="ellipsis"></i>
       <ul nz-menu>
+        <li nz-menu-item (click)="done(bookmark)">Done</li>
         <li nz-menu-item routerLink="/bookmark/{{ bookmark.id }}/edit">Edit</li>
         <li nz-menu-item (click)="delete(bookmark)">Delete</li>
       </ul>
