@@ -5,7 +5,7 @@ import { BookmarksState } from '../__services/state/bookmarks-state';
 import { CommandBus } from '../__services/command-handler/command-bus.service';
 import { AddFilterTag } from '../__services/command/add-filter-tag.command';
 import { FilterTagsState } from '../__services/state/filter-tags-state';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { DeleteBookmark } from '../__services/command/delete-bookmark.command';
 
 @Component({
@@ -21,7 +21,8 @@ export class BookmarksListComponent implements OnInit {
               private commandBus: CommandBus,
               private filterTagsState: FilterTagsState,
               private router: Router,
-              private modalService: NzModalService) { }
+              private modalService: NzModalService,
+              private message: NzMessageService) { }
 
   ngOnInit() {
     this.filterTagsState.subscribe(tags => this.filterTags = tags);
@@ -42,7 +43,10 @@ export class BookmarksListComponent implements OnInit {
   }
 
   done(bookmark: Bookmark) {
-    const onOk = () => this.commandBus.execute(new DeleteBookmark(bookmark));
+    const onOk = () => {
+      this.commandBus.execute(new DeleteBookmark(bookmark))
+      this.message.create('success', 'Congrats! You did it!')
+    };
     this.modalConfirm('Wow! Did you really do it?', 'primary', onOk);
   }
 
