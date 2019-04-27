@@ -14,4 +14,8 @@ export class RoutingService {
     const queryParams: Params = { tags: this.filterTagsState.latest.join(',') };
     this.router.navigate([''], { queryParams });
   }
+
+  navigateToLogin() {
+    this.router.navigateByUrl('login');
+  }
 }

@@ -56,6 +56,16 @@ export class AuthService {
     return token && refresh && this.jwtHelper.isTokenExpired(token) && !this.jwtHelper.isTokenExpired(refresh);
   }
 
+  isAccessTokenExpired() {
+    const token = localStorage.getItem('access_token');
+    return token && this.jwtHelper.isTokenExpired(token);
+  }
+
+  isRefreshTokenExpired() {
+    const refresh = localStorage.getItem('refresh_token');
+    return refresh && this.jwtHelper.isTokenExpired(refresh);
+  }
+
   private setUser(user: User) {
     this.user = user;
     localStorage.setItem('user', JSON.stringify(user));
