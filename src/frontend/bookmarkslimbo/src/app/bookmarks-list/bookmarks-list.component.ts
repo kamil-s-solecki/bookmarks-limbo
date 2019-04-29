@@ -44,8 +44,8 @@ export class BookmarksListComponent implements OnInit {
 
   done(bookmark: Bookmark) {
     const onOk = () => {
-      this.commandBus.execute(new DeleteBookmark(bookmark))
-      this.message.create('success', 'Congrats! You did it!')
+      this.commandBus.execute(new DeleteBookmark(bookmark));
+      this.message.create('success', 'Congrats! You did it!');
     };
     this.modalConfirm('Wow! Did you really do it?', 'primary', onOk);
   }

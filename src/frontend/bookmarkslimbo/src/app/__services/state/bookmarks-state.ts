@@ -21,10 +21,11 @@ export class BookmarksState extends BaseState<Bookmark[]> {
   }
 
   protected initialValue(): Observable<Bookmark[]> {
-    return this.filterTagsState.flatMap(tags => this.bookmarkApi.getList(tags));
+    return this.filterTagsState.flatMapFirst(tags => this.bookmarkApi.getList(tags));
   }
 
   refresh(andThen: () => void = doNothing) {
+    this.loadingInProgress();
     this.bookmarkApi.getList(this.filterTagsState.latest)
       .subscribe(bookmarks => {
         this.update(bookmarks);

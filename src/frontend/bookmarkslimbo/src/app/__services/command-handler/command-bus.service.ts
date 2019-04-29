@@ -11,9 +11,7 @@ export class CommandBus {
 
   execute(command: Command) {
     this.registry.handlers.forEach(handler => {
-      console.log(handler);
       if (handler.supports(command.name)) {
-        console.log('supports!');
         handler.handle(command);
       }
     });
