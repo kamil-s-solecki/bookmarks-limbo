@@ -1,0 +1,55 @@
+<div class="register-container" nz-row nzType="flex" nzJustify="space-around" nzAlign="middle"> 
+  <div>
+    <h1>Regi<span class="underline">s</span>ter</h1>
+    <form nz-col nz-form [formGroup]="registerForm" class="register-form" (ngSubmit)="submitForm()">
+      <nz-form-item>
+        <nz-form-control>
+          <nz-input-group>
+            <input type="text" nz-input formControlName="username" placeholder="Username" />
+          </nz-input-group>
+          <nz-form-explain *ngIf="registerForm.get('username')?.dirty && registerForm.get('username')?.errors"
+            >{{ errorMessage('username') }}</nz-form-explain
+          >
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <nz-input-group>
+            <input type="email" nz-input formControlName="email" placeholder="Email" />
+          </nz-input-group>
+          <nz-form-explain *ngIf="registerForm.get('email')?.dirty && registerForm.get('email')?.errors"
+            >{{ errorMessage('email') }}</nz-form-explain
+          >
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <nz-input-group>
+            <input type="password" nz-input formControlName="password" placeholder="Password" />
+          </nz-input-group>
+          <nz-form-explain *ngIf="registerForm.get('password')?.dirty && registerForm.get('password')?.errors"
+            >Password must have at least 6 chars,<br>one small letter, one big letter and one number!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <nz-input-group>
+            <input type="password" nz-input formControlName="confirmPassword" placeholder="Confirm password" />
+          </nz-input-group>
+          <nz-form-explain *ngIf="registerForm.get('confirmPassword')?.dirty && registerForm.get('confirmPassword')?.errors"
+            >Passwords must match!</nz-form-explain
+          >
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <button nz-button class="register-form-button" [nzType]="'primary'">Sign up</button>
+          Already have an account?
+          <a routerLink="/login">sign in</a>!
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</div>
+

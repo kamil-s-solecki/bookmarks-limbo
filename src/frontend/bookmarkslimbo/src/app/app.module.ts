@@ -17,6 +17,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { JwtRefreshInterceptorService } from './__services/jwt-refresh-interceptor.service';
 import { TagsFilterComponent } from './bookmarks-list/tags-filter/tags-filter.component';
 import { EditBookmarkComponent } from './edit-bookmark/edit-bookmark.component';
+import { RegisterComponent } from './register/register.component';
 
 registerLocaleData(en);
 
@@ -33,7 +34,8 @@ export function tokenGetter() {
     BookmarksListComponent,
     ExpirationCountPipe,
     TagsFilterComponent,
-    EditBookmarkComponent
+    EditBookmarkComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

@@ -25,6 +25,17 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(str(exc))
         return value
 
+    def validate_email(self, value): # pylint: disable=no-self-use
+        if User.objects.filter(email=value).count() > 0:
+            raise serializers.ValidationError('This email already exists!')
+        return value
+
+    def validate_username(self, value): # pylint: disable=no-self-use
+        if User.objects.filter(username=value).count() > 0:
+            raise serializers.ValidationError('This username already exists!')
+        return value
+
+
     class Meta:
         model = User
         fields = ('username', 'email', 'password')

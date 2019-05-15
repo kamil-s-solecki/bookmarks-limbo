@@ -26,6 +26,10 @@ export class AuthService {
       .pipe(map(tokens => this.saveTokens(tokens, username)));
   }
 
+  register(user: User): Observable<any> {
+    return this.http.post<User>(apiUrl('users/'), user);
+  }
+
   refresh(): Observable<any> {
     this.isRefreshing = true;
     const refresh = localStorage.getItem('refresh_token');
