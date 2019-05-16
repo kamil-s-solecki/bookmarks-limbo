@@ -48,7 +48,7 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter,
-        whitelistedDomains: ['localhost:8000'],
+        whitelistedDomains: ['localhost:8000', 'bookmarks-limbo.herokuapp.com'],
       }
     })
   ],
