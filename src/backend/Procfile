@@ -1,0 +1,1 @@
+web: cd bookmarkslimbo && gunicorn bookmarkslimbo.wsgi --log-file -
