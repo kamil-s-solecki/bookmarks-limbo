@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'TBA',
+  apiUrl: 'https://bookmarks-limbo.herokuapp.com/api/',
 };
