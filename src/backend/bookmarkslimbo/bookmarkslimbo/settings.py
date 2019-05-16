@@ -149,9 +149,11 @@ if DEBUG:
         .insert(0, 'rest_framework.authentication.BasicAuthentication')
 
 # CORS
+CORS_ALLOW_CREDENTIALS = True
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
-    CORS_ALLOW_CREDENTIALS = True
+else:
+    CORS_ORIGIN_WHITELIST = ['https://kamil-s-solecki.github.io/bookmarks-limbo']
 
 # Fixtures
 FIXTURE_DIRS = (
