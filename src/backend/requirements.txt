@@ -19,3 +19,4 @@ django-compressor
 djangorestframework_simplejwt
 pylint
 pylint-django
+dj-database-url
