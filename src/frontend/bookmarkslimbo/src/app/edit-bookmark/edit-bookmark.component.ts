@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { CommandBus } from '../__services/command-handler/command-bus.service';
 import { AddOrUpdateBookmark } from '../__services/command/add-or-update-bookmark.command';
 
-const urlReg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+const urlReg = new RegExp('^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?([?][\\S]*)?$');
 
 @Component({
   selector: 'app-edit-bookmark',
