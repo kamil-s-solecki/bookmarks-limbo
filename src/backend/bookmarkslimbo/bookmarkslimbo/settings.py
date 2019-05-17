@@ -24,7 +24,7 @@ SECRET_KEY = 'o1duxvnr6t+y9x%*vy%wp09cce0hjf%=%mw%oi*u^l&w=gsx-y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*',]
 
 # Application definition
 
@@ -153,7 +153,7 @@ CORS_ALLOW_CREDENTIALS = True
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
 else:
-    CORS_ORIGIN_WHITELIST = ['https://kamil-s-solecki.github.io/bookmarks-limbo']
+    CORS_ORIGIN_WHITELIST = ['https://kamil-s-solecki.github.io']
 
 # Fixtures
 FIXTURE_DIRS = (
