@@ -3,6 +3,7 @@ import { BookmarksState } from '../state/bookmarks-state';
 import { BookmarkApi } from '../bookmark.api';
 import { AddOrUpdateBookmark } from '../command/add-or-update-bookmark.command';
 import { RoutingService } from '../routing.service';
+import { finalize } from 'rxjs/operators';
 
 export class AddOrUpdateBookmarkHandler implements CommandHandler {
   constructor(private bookmarkApi: BookmarkApi,
@@ -13,7 +14,9 @@ export class AddOrUpdateBookmarkHandler implements CommandHandler {
     const apiCall = command.bookmark.id
       ? b => this.bookmarkApi.put(b)
       : b => this.bookmarkApi.post(b);
-    apiCall(command.bookmark).subscribe(_ => this.refreshAndNavigate());
+    apiCall(command.bookmark)
+      .pipe(finalize(command.andThen))
+      .subscribe(_ => this.refreshAndNavigate());
   }
 
   private refreshAndNavigate() {
