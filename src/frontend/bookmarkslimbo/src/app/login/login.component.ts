@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../__services/auth.service';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -10,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   loginFailure = false;
+  isLoading = false;
   loginForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
@@ -29,10 +31,13 @@ export class LoginComponent implements OnInit {
       return;
     }
     const credentials = this.loginForm.value;
-    this.authService.login(credentials.username, credentials.password).subscribe(
-      () => this.router.navigateByUrl(''),
-      () => this.loginFailure = true,
-      null
-    );
+    this.isLoading = true;
+    this.authService.login(credentials.username, credentials.password)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe(
+        () => this.router.navigateByUrl(''),
+        () => this.loginFailure = true,
+        null,
+      );
   }
 }

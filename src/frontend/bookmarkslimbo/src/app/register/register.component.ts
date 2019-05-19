@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
 import { AuthService } from '../__services/auth.service';
 import { User } from '../__models/user';
 import { RoutingService } from '../__services/routing.service';
+import { finalize } from 'rxjs/operators';
 
 const checkPasswords = (group: FormGroup) => {
   const pass = group.controls.password.value;
@@ -30,6 +30,7 @@ const strongPassword = (control: FormControl) => {
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   backendErrors = {};
+  isLoading = false;
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
@@ -50,11 +51,14 @@ export class RegisterComponent implements OnInit {
       return;
     }
     const user = this.registerForm.value as User;
-    this.authService.register(user).subscribe(
-        () => this.router.navigateToLogin(),
-        error => this.handleError(error.error),
-        null
-    );
+    this.isLoading = true;
+    this.authService.register(user)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe(
+          () => this.router.navigateToLogin(),
+          error => this.handleError(error.error),
+          null,
+      );
   }
 
   errorMessage(field) {

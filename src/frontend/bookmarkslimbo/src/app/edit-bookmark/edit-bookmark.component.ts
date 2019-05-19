@@ -21,6 +21,7 @@ export class EditBookmarkComponent implements OnInit {
   tags: string[] = [];
   inputTagVisible = false;
   inputTagValue = '';
+  isLoading = false;
   @ViewChild('inputTagElement') inputTagElement: ElementRef;
 
   private id: number | null = null;
@@ -79,7 +80,8 @@ export class EditBookmarkComponent implements OnInit {
     const bookmark = this.bookmarkForm.value as Bookmark;
     bookmark.tags = this.tags;
     bookmark.id = this.id;
-    this.commandBus.execute(new AddOrUpdateBookmark(bookmark));
+    this.isLoading = true;
+    this.commandBus.execute(new AddOrUpdateBookmark(bookmark, () => this.isLoading = false));
   }
 
   private fetchBookmark() {
